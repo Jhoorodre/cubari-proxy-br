@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "public/index.html", "use": "@vercel/static" },
+    { "src": "build/**", "use": "@vercel/static" }
+  ],
+  "routes": [
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
+        { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
+        { "key": "Access-Control-Allow-Headers", "value": "*" },
+        { "key": "Content-Security-Policy", "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.github.io; connect-src 'self' https://services.f-ck.me https://resizer.f-ck.me https://obs.f-ck.me https://cdn.jsdelivr.net; img-src 'self' data: https: http:; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" }
+      ]
+    }
+  ]
+}
