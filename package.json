@@ -1,7 +1,7 @@
 {  "name": "cubari-proxy",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://seu-usuario.github.io/cubari-proxy-br/",
+  "homepage": "https://Jhoorodre.github.io/cubari-proxy-br/",
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
