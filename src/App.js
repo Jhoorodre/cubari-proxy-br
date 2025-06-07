@@ -12,10 +12,11 @@ import { purgePreviousCache } from "./utils/remotestorage";
 import update from "immutability-helper";
 import Spinner from "./components/Spinner";
 import { science } from "./utils/science";
+import { useTranslation } from 'react-i18next';
 
 const DEDUP_SEARCH_MAX_TRIES = 2;
 
-export default class App extends Component {
+class AppClass extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -71,18 +72,13 @@ export default class App extends Component {
         section.sourceName = sourceName;
         section.viewMoreHandler = this.viewMoreHandler;
         if (section.containsMoreItems || section.view_more) {
-          // Initialize the section with empty metadata in order to support
-          // extensions that return null as a stop-signal
           section.metadata = {};
           section.hasMore = true;
         } else {
-          // Use hasMore to draw the ViewMore placeholder
           section.hasMore = false;
         }
-        // Only update state with sections that have items
         if (section.items && section.items.length) {
           section.items = this.dedupItemList(section.title, section.items);
-
           this.setState(
             update(this.state, {
               discover: { [section.title]: { $set: section } },
@@ -97,16 +93,12 @@ export default class App extends Component {
     let runCount = 0;
     let results;
     let metadata = section.metadata;
-
     do {
-      // Takes the section object from the above which includes metadata to continue the search
       results = await section.source.getViewMoreItems(section.id, metadata);
-
       metadata = results.metadata;
       results.results = this.dedupItemList(section.title, results.results);
       runCount++;
     } while (!results.results.length && runCount < DEDUP_SEARCH_MAX_TRIES);
-
     this.setState(
       update(this.state, {
         discover: {
@@ -124,7 +116,6 @@ export default class App extends Component {
   componentDidMount = async () => {
     purgePreviousCache();
     await initSources();
-
     this.setState(
       {
         sourcesReady: true,
@@ -134,17 +125,17 @@ export default class App extends Component {
   };
 
   render() {
+    const { t } = this.props; // Recebendo t via props
     return (
       <HashRouter>
         <Menu as="nav" className="bg-transparent">
           <div className="max-w-6xl mx-auto px-2 md:px-0 lg:px-0">
             <div className="relative flex items-center justify-between h-16">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                {/* Mobile menu button*/}
                 <Menu.Button className="inline-flex items-center justify-center p-2 rounded-md text-black hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white focus:outline-none">
                   {({ open }) => (
                     <Fragment>
-                      <span className="sr-only">Open main menu</span>
+                      <span className="sr-only">{t('openMainMenu')}</span>
                       {open ? (
                         <XIcon className="block h-6 w-6" aria-hidden="true" />
                       ) : (
@@ -159,42 +150,30 @@ export default class App extends Component {
               </div>
               <div className="flex-1 flex sm:ml-3 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="flex-shrink-0 flex items-center">
-                  {/* <img
-                            className="block lg:hidden h-8 w-auto"
-                            src="https://cubari.moe/static/favicon.png"
-                            alt="Workflow"
-                          />
-                          <img
-                            className="hidden lg:block h-8 w-auto"
-                            src="https://cubari.moe/static/favicon.png"
-                            alt="Workflow"
-                          /> */}
                 </div>
                 <div className="hidden sm:block">
                   <div className="flex space-x-4">
-                    {/* Desktop layout */}
-                    {Object.keys(navigation).map((item) => {
-                      let name = item;
-                      item = navigation[name];
-                      if (!navigation[name].inNav) return undefined;
+                    {Object.keys(navigation).map((navItemKey) => {
+                      const navItem = navigation[navItemKey];
+                      if (!navItem.inNav) return undefined;
                       return (
                         <Link
-                          key={name}
-                          to={item.href}
+                          key={navItemKey}
+                          to={navItem.href}
                           onClick={() => {
-                            this.setState({ current: name });
+                            this.setState({ current: navItemKey });
                           }}
                           className={classNames(
-                            name === this.state.current
+                            navItemKey === this.state.current
                               ? "bg-black text-white dark:bg-gray-800 dark:text-white"
                               : "bg-transparent text-black hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white",
                             "px-3 py-2 rounded-md text-md font-medium"
                           )}
                           aria-current={
-                            name === this.state.current ? "page" : undefined
+                            navItemKey === this.state.current ? "page" : undefined
                           }
                         >
-                          {name}
+                          {t(navItem.i18nKey || navItemKey.toLowerCase())}
                         </Link>
                       );
                     })}
@@ -217,29 +196,27 @@ export default class App extends Component {
             leaveTo="transform scale-95 opacity-0"
           >
             <Menu.Item as="div" className="sm:hidden px-2 pt-2 pb-3 space-y-1">
-              {/* Mobile layout */}
-              {Object.keys(navigation).map((item) => {
-                let name = item;
-                item = navigation[name];
-                if (!navigation[name].inNav) return undefined;
+              {Object.keys(navigation).map((navItemKey) => {
+                const navItem = navigation[navItemKey];
+                if (!navItem.inNav) return undefined;
                 return (
                   <Link
-                    key={name}
-                    to={item.href}
+                    key={navItemKey}
+                    to={navItem.href}
                     onClick={() => {
-                      this.setState({ current: name });
+                      this.setState({ current: navItemKey });
                     }}
                     className={classNames(
-                      name === this.state.current
+                      navItemKey === this.state.current
                         ? "bg-black text-white dark:bg-gray-800 dark:text-white"
                         : "bg-transparent text-black hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white",
                       "block px-3 py-2 rounded-md text-base font-medium"
                     )}
                     aria-current={
-                      name === this.state.current ? "page" : undefined
+                      navItemKey === this.state.current ? "page" : undefined
                     }
                   >
-                    {name}
+                    {t(navItem.i18nKey || navItemKey.toLowerCase())}
                   </Link>
                 );
               })}
@@ -259,3 +236,13 @@ export default class App extends Component {
     );
   }
 }
+
+// Envolvendo o componente de classe com o HOC withTranslation
+// ou criando um wrapper funcional para injetar `t` via props.
+// Esta é uma abordagem comum para usar hooks em componentes de classe.
+const AppWithTranslation = (props) => {
+  const { t, i18n } = useTranslation();
+  return <AppClass {...props} t={t} i18n={i18n} />;
+};
+
+export default AppWithTranslation;

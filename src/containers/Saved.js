@@ -10,8 +10,9 @@ import Spinner from "../components/Spinner";
 import { sourceMap } from "../sources/Sources";
 import { mangaUrlBuilder } from "../utils/compatability";
 import ScrollableCarousel from "../components/ScrollableCarousel";
+import { withTranslation } from 'react-i18next';
 
-export default class Saved extends PureComponent {
+class SavedClass extends PureComponent {
   constructor(props) {
     super(props);
     this.ref = React.createRef();
@@ -39,11 +40,12 @@ export default class Saved extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <Container>
         <Section
-          text="Saved"
-          subText={'This includes stuff you\'ve "hearted"'}
+          text={t('favorites')}
+          subText={t('savedSubtext')}
           ref={this.ref}
         ></Section>
         {this.state.ready ? (
@@ -68,3 +70,5 @@ export default class Saved extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(SavedClass);

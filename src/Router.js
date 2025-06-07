@@ -11,6 +11,7 @@ export const navigation = {
   Discover: {
     href: "/",
     inNav: true,
+    i18nKey: 'discover',
     component: (app) => (
       <Discover discover={app.state.discover} setPath={app.setPath} />
     ),
@@ -18,6 +19,7 @@ export const navigation = {
   Search: {
     href: "/search",
     inNav: true,
+    i18nKey: 'search',
     component: (app) => (
       <Search
         searchResults={app.state.searchResults}
@@ -31,16 +33,19 @@ export const navigation = {
   History: {
     href: "/history",
     inNav: true,
+    i18nKey: 'history',
     component: (app) => <History setPath={app.setPath} />,
   },
   Saved: {
     href: "/saved",
     inNav: true,
+    i18nKey: 'favorites', // Usando 'favorites' como no translation.json
     component: (app) => <Saved setPath={app.setPath} />,
   },
   Settings: {
     href: "/settings",
     inNav: true,
+    i18nKey: 'settings',
     component: (app) => <Settings setPath={app.setPath} />,
   },
 };

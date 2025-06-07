@@ -25,3 +25,7 @@ yarn-error.log*
 
 # VS Code workspace
 *.code-workspace
+
+# Roadmaps
+roadmap_traducao_ptbr.md
+roadmap_traducao_ptbr.txt

@@ -4,10 +4,11 @@ import Spinner from "../components/Spinner";
 import ScrollableCarousel from "../components/ScrollableCarousel";
 import Section from "../components/Section";
 import Container from "../components/Container";
+import { withTranslation } from 'react-i18next';
 
 const recommendedSources = ["MangaKatana", "Manga4Life", "Guya"];
 
-export default class Search extends PureComponent {
+class SearchClass extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -36,21 +37,17 @@ export default class Search extends PureComponent {
   };
 
   sourceQueryHelper = (sourceName, source, queryTask) => {
-    // TODO consider limiting the returned results, which means we need to pass
-    // an async callback to the carousel to load more if we're near the end
     this.runningQueries.add(queryTask);
     let hasMore = false;
     source
       .getSearchResults({ ...queryTask.query }, queryTask.metadata)
       .then((e) => {
-        // This bounds check ensures that the returning query is still current
-        // Otherwise it could return results to a new result as you type it in
         if (this.runningQueries.has(queryTask) && this.inputRef.current) {
           let results = (e.results || []).map((manga) => {
             manga.mangaUrlizer = source.getMangaUrl;
-            manga.slug = manga.mangaId || manga.id; // 0.6 compatibility
+            manga.slug = manga.mangaId || manga.id;
             manga.coverUrl = manga.image;
-            manga.mangaTitle = manga.title.text || manga.title; // 0.6 compatibility
+            manga.mangaTitle = manga.title.text || manga.title;
             manga.source = source;
             manga.sourceName = sourceName;
             return manga;
@@ -95,8 +92,6 @@ export default class Search extends PureComponent {
   componentDidMount = () => {
     this.props.setPath("Search");
     setTimeout(() => {
-      // TODO fix this focus problem where the mobile nav button gets
-      // focus after dismissing the menu. This can be an issue on faster devices
       if (this.inputRef.current) {
         this.inputRef.current.focus();
       }
@@ -104,6 +99,7 @@ export default class Search extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     const items = [];
     Object.entries(this.props.searchResults).forEach(([source, results]) => {
       if (results && results.length) {
@@ -112,8 +108,8 @@ export default class Search extends PureComponent {
             key={`search-${source}`}
             text={source}
             subText={
-              (recommendedSources.includes(source) ? "Recommended - " : "") +
-              `${results.length} result(s)`
+              (recommendedSources.includes(source) ? t('recommendedPrefix') : "") +
+              t('resultsCount', { count: results.length })
             }
           />
         );
@@ -143,7 +139,7 @@ export default class Search extends PureComponent {
           onKeyPress={this.handleInput}
           type="text"
           defaultValue={this.props.searchQuery}
-          placeholder="Search..."
+          placeholder={t('searchPlaceholder')}
         />
         {items.length ? <Container>{items}</Container> : undefined}
         {this.state.searching ? (
@@ -151,11 +147,13 @@ export default class Search extends PureComponent {
         ) : items.length ? undefined : this.props.searchQuery ? (
           <Section
             key="results"
-            text="No results."
-            subText="Sorry 'bout that."
+            text={t('noResults')}
+            subText={t('noResultsSubtitle')}
           />
         ) : undefined}
       </Container>
     );
   }
 }
+
+export default withTranslation()(SearchClass);

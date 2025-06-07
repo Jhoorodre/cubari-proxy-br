@@ -3,10 +3,11 @@ import { ChatIcon } from "@heroicons/react/outline";
 import { Popover, Transition } from "@headlessui/react";
 import Section from "./Section";
 import { classNames } from "../utils/strings";
+import { useTranslation } from 'react-i18next';
 
 const BLACKHOLE_URL = "https://guya.moe/api/black_hole_mail/";
 
-export default class BlackholeMail extends PureComponent {
+class BlackholeMailClass extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,6 +23,7 @@ export default class BlackholeMail extends PureComponent {
   };
 
   handleKeyPress = (e) => {
+    const { t } = this.props;
     if (e.key === "Enter" && this.state.textValue) {
       this.setState(
         {
@@ -38,14 +40,14 @@ export default class BlackholeMail extends PureComponent {
             .then((e) => {
               this.setState({
                 textValue:
-                  (e.success && "Successfully delivered!") ||
-                  (e.error && "Failed to send.") ||
-                  "No response.",
+                  (e.success && t('blackholeSuccess')) ||
+                  (e.error && t('blackholeError')) ||
+                  t('blackholeNoResponse'),
               });
             })
             .catch(() => {
               this.setState({
-                textValue: "Failed to send.",
+                textValue: t('blackholeError'),
               });
             });
         }
@@ -54,6 +56,7 @@ export default class BlackholeMail extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <Popover as={Fragment}>
         {({ open }) => (
@@ -85,9 +88,9 @@ export default class BlackholeMail extends PureComponent {
                 <div className="ml-8 overflow-hidden mt-6 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5">
                   <div className="p-4 text-black dark:text-white bg-gray-100 dark:bg-gray-800 pointer-events-auto">
                     <Section
-                      text="Send us a message!"
+                      text={t('blackholeTitle')}
                       textSize="text-2xl"
-                      subText="Let us know if you have any ideas, suggestions, or issues (we actually see these!)"
+                      subText={t('blackholeSubtitle')}
                       subTextSize="text-sm"
                     ></Section>
                     <input
@@ -101,7 +104,7 @@ export default class BlackholeMail extends PureComponent {
                       onKeyPress={this.handleKeyPress}
                       type="text"
                       value={this.state.textValue}
-                      placeholder="Press enter to send..."
+                      placeholder={t('blackholePlaceholder')}
                       disabled={this.state.submitted}
                     />
                   </div>
@@ -114,3 +117,10 @@ export default class BlackholeMail extends PureComponent {
     );
   }
 }
+
+const BlackholeMail = (props) => {
+  const { t } = useTranslation();
+  return <BlackholeMailClass {...props} t={t} />;
+};
+
+export default BlackholeMail;

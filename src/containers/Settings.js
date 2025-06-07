@@ -6,12 +6,13 @@ import { remoteStorage } from "../utils/remotestorage";
 import Spinner from "../components/Spinner";
 import { Switch } from "@headlessui/react";
 import { classNames } from "../utils/strings";
+import { withTranslation } from 'react-i18next';
 
 const REMOTE_STORAGE_WIDGET_ID = "remote-storage-widget";
 const HENTAI_KEY = "hentai";
 const HENTAI_VALUE = "enabled";
 
-export default class Settings extends PureComponent {
+class SettingsClass extends PureComponent {
   constructor(props) {
     super(props);
     this.widgetRef = React.createRef();
@@ -58,13 +59,14 @@ export default class Settings extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <Container>
-        <Section text="Settings"></Section>
+        <Section text={t('settingsPageTitle')}></Section>
         <Section
-          text="Hentai Mode"
+          text={t('hentaiModeTitle')}
           textSize="text-2xl"
-          subText="For the horny"
+          subText={t('hentaiModeSubtext')}
         ></Section>
         <Container>
           <div className="h-full w-full mb-5 items-center sm:items-start mt-5 flex flex-wrap place-content-center sm:place-content-start">
@@ -78,7 +80,7 @@ export default class Settings extends PureComponent {
                 "relative inline-flex items-center h-6 rounded-full w-11 focus:outline-none"
               )}
             >
-              <span className="sr-only">Enable notifications</span>
+              <span className="sr-only">{t('srOnlyEnableHentaiMode')}</span>
               <span
                 className={classNames(
                   this.state.hentaiEnabled ? "translate-x-6" : "translate-x-1",
@@ -89,9 +91,9 @@ export default class Settings extends PureComponent {
           </div>
         </Container>
         <Section
-          text="Remote Storage"
+          text={t('remoteStorageTitle')}
           textSize="text-2xl"
-          subText="[Experimental] Synchronize your reading history across different devices"
+          subText={t('remoteStorageSubtext')}
         />
         <div className="h-full w-full items-center sm:items-start mt-5 flex flex-wrap place-content-center sm:place-content-start">
           <div id={REMOTE_STORAGE_WIDGET_ID} ref={this.widgetRef}></div>
@@ -101,3 +103,5 @@ export default class Settings extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(SettingsClass);

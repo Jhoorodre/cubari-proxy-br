@@ -10,8 +10,9 @@ import { sourceMap } from "../sources/Sources";
 import { RadioGroup } from "@headlessui/react";
 import { classNames } from "../utils/strings";
 import EndPlaceholder from "../components/EndPlaceholder";
+import { withTranslation } from 'react-i18next'; // Adicionar import
 
-export default class Discover extends PureComponent {
+class DiscoverClass extends PureComponent { // Renomear para DiscoverClass
   state = {
     currentSource: Object.keys(sourceMap)[0],
   };
@@ -43,17 +44,26 @@ export default class Discover extends PureComponent {
   };
 
   render() {
+    const { t } = this.props; 
     const items = [];
     Object.values(this.props.discover).forEach((section) => {
       if (section.items && section.items.length) {
-        let subText = section.title.split(" - ")[1];
+        const titleParts = section.title.split(" - ");
+        const sourceName = titleParts[0];
+        const originalSectionTitle = titleParts.length > 1 ? titleParts.slice(1).join(" - ") : ""; // Lida com títulos que podem não ter " - "
+
+        const translatedSourceName = t(`sourceName${sourceName.replace(/\s+/g, '')}`, sourceName);
+        const sectionDisplayTitle = originalSectionTitle 
+          ? `${translatedSourceName} - ${capitalizeFirstLetters(originalSectionTitle)}` 
+          : translatedSourceName;
+
         items.push(
           <Fragment
             key={section.sourceName + section.id + section.title + "-section"}
           >
             <Section
               key={section.id + section.title + "title"}
-              text={capitalizeFirstLetters(subText)}
+              text={sectionDisplayTitle}
             />
             <ScrollableCarousel
               key={section.id + section.title + "-carousel"}
@@ -150,3 +160,5 @@ export default class Discover extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(DiscoverClass); // Envolver com HOC

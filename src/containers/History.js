@@ -10,8 +10,9 @@ import Spinner from "../components/Spinner";
 import { sourceMap } from "../sources/Sources";
 import { mangaUrlBuilder } from "../utils/compatability";
 import ScrollableCarousel from "../components/ScrollableCarousel";
+import { withTranslation } from 'react-i18next';
 
-export default class History extends PureComponent {
+class HistoryClass extends PureComponent {
   constructor(props) {
     super(props);
     this.ref = React.createRef();
@@ -39,11 +40,12 @@ export default class History extends PureComponent {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <Container>
         <Section
-          text="History"
-          subText={`This includes the last ${globalHistoryHandler.max} things you've clicked on (${this.state.items.length} so far)`}
+          text={t('historyPageTitle')}
+          subText={t('historySubtext', { maxItems: globalHistoryHandler.max, currentCount: this.state.items.length })}
           ref={this.ref}
         ></Section>
         {this.state.ready ? (
@@ -69,3 +71,5 @@ export default class History extends PureComponent {
     );
   }
 }
+
+export default withTranslation()(HistoryClass);
