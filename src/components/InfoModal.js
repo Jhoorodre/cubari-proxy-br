@@ -2,7 +2,7 @@ import React, { PureComponent, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { InformationCircleIcon } from "@heroicons/react/outline";
 import Section from "./Section";
-import preval from "preval.macro";
+// import preval from "preval.macro"; // Comentado
 import Container from "./Container";
 
 // Should probably be a build var but fuck itttttt
@@ -10,15 +10,17 @@ const DISCORD_INVITE = "https://discord.gg/wwD2xTbQxe";
 
 // We'll throw these up here since they're replaced at build time anyway
 const CHANGELOG_KEY = "changelog";
-const CHANGELOG_SERIES = JSON.parse(preval`
-const gitlog = require("gitlog").default;
-const gitlogOptions = {
-  repo: __dirname,
-  number: 5,
-  fields: ["abbrevHash", "authorDate", "authorName", "subject"],
-};
-module.exports = JSON.stringify(gitlog(gitlogOptions))
-`);
+// const CHANGELOG_SERIES = JSON.parse(preval`
+// const gitlog = require("gitlog").default;
+// const gitlogOptions = {
+//   repo: __dirname,
+//   number: 5,
+//   fields: ["abbrevHash", "authorDate", "authorName", "subject"],
+// };
+// module.exports = JSON.stringify(gitlog(gitlogOptions))
+// `);
+const CHANGELOG_SERIES = []; // Definido como array vazio para evitar erros
+
 export default class InfoModal extends PureComponent {
   state = {
     isOpen: false,
@@ -27,14 +29,18 @@ export default class InfoModal extends PureComponent {
 
   setIsOpen = (open) => {
     return () => {
-      localStorage.setItem(CHANGELOG_KEY, CHANGELOG_SERIES[0].abbrevHash);
+      // localStorage.setItem(CHANGELOG_KEY, CHANGELOG_SERIES[0].abbrevHash); // Comentado para evitar erro se CHANGELOG_SERIES estiver vazio
+      if (CHANGELOG_SERIES.length > 0) {
+        localStorage.setItem(CHANGELOG_KEY, CHANGELOG_SERIES[0].abbrevHash);
+      }
       this.setState({ isOpen: open, changeAvailable: false });
     };
   };
 
   componentDidMount = () => {
     const lastItem = localStorage.getItem(CHANGELOG_KEY);
-    if (!lastItem || lastItem !== CHANGELOG_SERIES[0].abbrevHash) {
+    // if (!lastItem || lastItem !== CHANGELOG_SERIES[0].abbrevHash) { // Comentado para evitar erro se CHANGELOG_SERIES estiver vazio
+    if (CHANGELOG_SERIES.length > 0 && (!lastItem || lastItem !== CHANGELOG_SERIES[0].abbrevHash)) {
       this.setState({
         changeAvailable: true,
       });
@@ -124,7 +130,7 @@ export default class InfoModal extends PureComponent {
                         </a>
                       </Dialog.Description>
                     </Container>
-                    <Section text="Changelog" />
+                    {/* <Section text="Changelog" />
                     <Container>
                       <Dialog.Description>
                         {CHANGELOG_SERIES.map((changelog) => (
@@ -136,7 +142,7 @@ export default class InfoModal extends PureComponent {
                           </span>
                         ))}
                       </Dialog.Description>
-                    </Container>
+                    </Container> */}
                   </div>
                   <button
                     className="mt-10 bg-transparent text-black hover:bg-gray-200 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white block px-3 py-2 rounded-md text-base font-medium"

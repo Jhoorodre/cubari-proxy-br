@@ -1,7 +1,7 @@
-{  "name": "cubari-proxy",
+{
+  "name": "cubari-proxy",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://Jhoorodre.github.io/cubari-proxy-br/",
   "dependencies": {
     "@headlessui/react": "^1.2.0",
     "@heroicons/react": "^1.0.1",
@@ -28,8 +28,8 @@
     "remotestoragejs": "^1.2.3"
   },
   "scripts": {
-    "start": "GENERATE_SOURCEMAP=false react-scripts start",
-    "build": "GENERATE_SOURCEMAP=false react-scripts build",
+    "start": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false \" && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^10.4.2",
+    "cross-env": "^7.0.3",
     "postcss": "^8.4.5",
     "source-map-loader": "^5.0.0",
     "tailwindcss": "^3.0.12",
