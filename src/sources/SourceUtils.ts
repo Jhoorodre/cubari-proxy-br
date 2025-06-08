@@ -3,8 +3,6 @@ import * as cheerio from 'cheerio';
 import { Base64 } from "js-base64";
 import { CubariSource, State } from "./types";
 
-const PROXY_URL = "https://services.f-ck.me";
-
 const IMAGE_RESIZE_URL = "https://resizer.f-ck.me";
 
 const getJsDelivrBaseUrl = (
@@ -71,17 +69,25 @@ const base64UrlEncode = (s: string): string => {
 };
 
 const convertImageUrl = (originalUrl: string): string => {
-  return `${PROXY_URL}/v1/image/${base64UrlEncode(
-    originalUrl
-  )}?source=proxy_cubari_moe`;
+  // Modificado para usar o proxy local em /api/proxy
+  const encodedUrl = base64UrlEncode(originalUrl); // Usar a função local base64UrlEncode
+  // Adicionamos um parâmetro extra para que o proxy saiba que é uma requisição de imagem,
+  // caso precisemos de lógica especial para imagens no futuro (ex: adicionar Referer).
+  return `/api/proxy?targetUrl=${encodeURIComponent(originalUrl)}&isImage=true`;
 };
 
 const resizedImageUrl = (url: string, queryParams: string): string => {
-  return `${IMAGE_RESIZE_URL}/?url=${url}&${queryParams ?? ""}`;
+  // Temporariamente, vamos retornar a URL diretamente,
+  // assumindo que 'url' já é a URL do proxy vinda de convertImageUrl
+  // ou que não queremos redimensionamento se 'url' for uma URL original.
+  // No futuro, podemos decidir se 'url' aqui deve ser a original ou a do proxy
+  // e como integrar o resizer corretamente.
+  console.log('[DEBUG] resizedImageUrl called. Input url:', url, 'queryParams:', queryParams);
+  // return `${IMAGE_RESIZE_URL}/?url=${url}&${queryParams ?? ""}`; // Linha original comentada
+  return url; // Retorna a URL diretamente
 };
 
 export {
-  PROXY_URL,
   loadExternalSource,
   getJsDelivrBaseUrl,
   base64UrlEncode,

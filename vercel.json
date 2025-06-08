@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ],
   "headers": [
     {
       "source": "/(.*)",
@@ -10,7 +7,7 @@
         { "key": "Access-Control-Allow-Origin", "value": "*" },
         { "key": "Access-Control-Allow-Methods", "value": "GET, POST, OPTIONS" },
         { "key": "Access-Control-Allow-Headers", "value": "*" },
-        { "key": "Content-Security-Policy", "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.github.io; connect-src 'self' https://services.f-ck.me https://resizer.f-ck.me https://obs.f-ck.me https://cdn.jsdelivr.net; img-src 'self' data: https: http:; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" }
+        { "key": "Content-Security-Policy", "value": "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net https://*.github.io; connect-src 'self' ws://localhost:* wss://localhost:* https://services.f-ck.me https://resizer.f-ck.me https://obs.f-ck.me https://cdn.jsdelivr.net http://5apps.com https://5apps.com https://storage.5apps.com; img-src 'self' data: https: http:; style-src 'self' 'unsafe-inline'; frame-ancestors 'none';" }
       ]
     }
   ]
