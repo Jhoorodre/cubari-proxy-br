@@ -16,9 +16,10 @@
     "buffer": "^6.0.3",
     "cheerio": "^1.0.0-rc.12",
     "gitlog": "^4.0.4",
-    "i18next": "^25.2.1",
+    "i18next": "~23.11.5",
     "immutability-helper": "^3.1.1",
     "js-base64": "^3.7.2",
+    "node-fetch": "^2.7.0",
     "paperback-extensions-common": "^5.0.0-alpha.5",
     "preval.macro": "^5.0.0",
     "react": "^16.13.1",
@@ -31,6 +32,7 @@
   },
   "scripts": {
     "start": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
+    "dev": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
     "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false \" && react-scripts build",
     "test": "react-scripts test",
@@ -51,7 +53,9 @@
       "last 1 safari version"
     ]
   },
+  "proxy": "http://localhost:3000",
   "devDependencies": {
+    "ajv": "^8.17.1",
     "autoprefixer": "^10.4.2",
     "cross-env": "^7.0.3",
     "postcss": "^8.4.5",
