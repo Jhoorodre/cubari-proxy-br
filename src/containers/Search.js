@@ -103,13 +103,17 @@ class SearchClass extends PureComponent {
     const items = [];
     Object.entries(this.props.searchResults).forEach(([source, results]) => {
       if (results && results.length) {
+        const count = results.length;
+        const translationKey = 'resultsCount';
+        const translatedText = t(translationKey, { count });
+        console.log(`DEBUG: Source: ${source}, Count: ${count}, Key: ${translationKey}, Translated: ${translatedText}`); // Adicionado para depuração
         items.push(
           <Section
             key={`search-${source}`}
             text={source}
             subText={
               (recommendedSources.includes(source) ? t('recommendedPrefix') : "") +
-              t('resultsCount', { count: results.length })
+              translatedText // Usando a variável depurada
             }
           />
         );

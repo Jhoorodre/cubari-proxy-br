@@ -20,6 +20,7 @@ const nsfwSourceMap: RawSourceMap = {
     filePath: "primary/MangaDex",
     state: {
       ratings: ["pornographic"],
+      languages: ["pt-br", "en"] // Adicionado para priorizar pt-br
     },
     slugMapper: (slug) => `https://cubari.moe/read/mangadex/${slug}/`,
   },
@@ -47,7 +48,9 @@ const sfwSourceMap: RawSourceMap = {
     repo: "extensions-sources",
     commit: "7108837f179b5de7ba08cf0f187c0691e4704d3b",
     filePath: "primary/MangaDex",
-    state: {},
+    state: {
+      languages: ["pt-br", "en"] // Adicionado para priorizar pt-br
+    },
     slugMapper: (slug) => `https://cubari.moe/read/mangadex/${slug}/`,
   },
   WeebCentral: {

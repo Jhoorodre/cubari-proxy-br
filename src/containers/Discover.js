@@ -138,10 +138,10 @@ class DiscoverClass extends PureComponent { // Renomear para DiscoverClass
                           <img
                             src={source.icon}
                             className="h-8 w-8"
-                            alt={source.name}
+                            alt={t(`sourceName${source.name.replace(/\s+/g, '')}`, source.name)} // Traduzir alt text
                           />
                         )}
-                        <div className="block px-2">{source.name}</div>
+                        <div className="block px-2">{t(`sourceName${source.name.replace(/\s+/g, '')}`, source.name)}</div> {/* Traduzir nome da fonte */}
                       </button>
                     )}
                   </RadioGroup.Option>

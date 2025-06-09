@@ -7,6 +7,7 @@ import { sourceMap, initSources } from "./sources/Sources";
 import InfoModal from "./components/InfoModal.js";
 import ThemeSwitcher from "./components/ThemeSwitcher.js";
 import BlackholeMail from "./components/BlackholeMail.js";
+import RemoteStorageHelp from "./components/RemoteStorageHelp.js";
 import Router, { navigation } from "./Router.js";
 import { purgePreviousCache } from "./utils/remotestorage";
 import update from "immutability-helper";
@@ -232,6 +233,7 @@ class AppClass extends Component {
             </div>
           </div>
         )}
+        <RemoteStorageHelp />
       </HashRouter>
     );
   }

@@ -171,7 +171,7 @@ function MangaCard(props) {
             className="text-xs md:text-sm text-white font-bold"
             style={{ textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000' }} // Contorno preto nítido
           >
-            {props.sourceName}
+            {t(`sourceName${props.sourceName.replace(/\s+/g, '')}`, props.sourceName)}
           </p>
           <div className="flex flex-row">
             {props.showRemoveButton && (

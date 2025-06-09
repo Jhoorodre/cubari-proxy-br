@@ -43,6 +43,48 @@ html {
   position: relative !important;
 }
 
+.remote-storage-help-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  border-radius: 50%;
+  box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+  background: linear-gradient(135deg, #FF69B4, #FF1493);
+  padding: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  animation: pulse-gentle 3s infinite;
+}
+
+.remote-storage-help-button:hover {
+  background: linear-gradient(135deg, #FF1493, #DC143C);
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(255, 105, 180, 0.6);
+  animation: none;
+}
+
+@keyframes pulse-gentle {
+  0% {
+    box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 25px rgba(255, 105, 180, 0.6);
+  }
+  100% {
+    box-shadow: 0 4px 20px rgba(255, 105, 180, 0.4);
+  }
+}
+
+.remote-storage-help-icon {
+  width: 32px; /* Tamanho do ícone aumentado */
+  height: 32px; /* Tamanho do ícone aumentado */
+  color: white; /* Cor do ícone definida como branca */
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -52,6 +94,33 @@ html {
   .no-scrollbar {
     -ms-overflow-style: none; /* IE and Edge */
     scrollbar-width: none; /* Firefox */
+  }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c0c0c0; /* Cor da barra de rolagem light mode */
+    border-radius: 4px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #a0a0a0;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #505050; /* Cor da barra de rolagem dark mode */
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #707070;
+  }
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #c0c0c0 transparent; /* Firefox light mode */
+  }
+  .dark .custom-scrollbar {
+    scrollbar-color: #505050 transparent; /* Firefox dark mode */
   }
 }
 

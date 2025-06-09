@@ -95,6 +95,19 @@ class SettingsClass extends PureComponent {
           textSize="text-2xl"
           subText={t('remoteStorageSubtext')}
         />
+        <Container className="mt-4 mb-6 text-sm space-y-3">
+          <p className="text-gray-700 dark:text-gray-300 italic">{t('settings.remoteStorage.briefIntroPlusBenefits')}</p>          <p className="text-gray-700 dark:text-gray-300">
+            {t('settings.remoteStorage.createAccountPromptShort')}{' '}
+            <a 
+              href="https://5apps.com/users/sign_up?site=storage" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300 underline"
+            >
+              {t('settings.remoteStorage.createAccountLinkText')}
+            </a>
+          </p>
+        </Container>
         <div className="h-full w-full items-center sm:items-start mt-5 flex flex-wrap place-content-center sm:place-content-start">
           <div id={REMOTE_STORAGE_WIDGET_ID} ref={this.widgetRef}></div>
           {this.state.ready ? undefined : <Spinner />}
