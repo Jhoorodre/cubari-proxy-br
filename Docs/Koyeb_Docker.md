@@ -1,4 +1,4 @@
-# PARTE A (Revisada): Deploy do Suwayomi-Server na Koyeb (Simples e Detalhado)
+# PARTE A: Deploy do Suwayomi-Server na Koyeb
 
 **Objetivo:** Colocar o seu servidor de mangás Suwayomi-Server para funcionar online usando uma imagem Docker pronta, para que você possa acessá-lo de qualquer lugar através de uma URL pública.
 
