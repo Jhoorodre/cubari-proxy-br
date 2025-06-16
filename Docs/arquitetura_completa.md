@@ -1,9 +1,3 @@
-Com certeza! A arquitetura original era boa, mas focar em **Remote Storage** e transformar o backend em um **API Gateway** é uma abordagem mais moderna, segura e que dá mais controle ao usuário.
-
-Aqui está o arquivo `arquitetura_completa.md` atualizado para refletir essa nova arquitetura com 5 componentes (React, Django, PostgreSQL, Suwayomi-Server e Remote Storage).
-
----
-
 # Arquitetura Completa - React, Django (API Gateway), Suwayomi-Server, PostgreSQL (Cache) e Remote Storage
 
 Excelente ajuste! Vamos montar o quebra-cabeça com a arquitetura moderna, focada na privacidade do usuário e na separação de responsabilidades.
