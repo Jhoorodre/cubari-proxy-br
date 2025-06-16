@@ -1,5 +1,3 @@
-### **Arquivo `arquitetura_completa.md` (Versão Revisada e Final)**
-
 # Arquitetura Completa - React, Django (API Gateway), Suwayomi-Server, PostgreSQL (Cache) e Remote Storage
 
 Excelente! Com os detalhes da API, podemos montar o quebra-cabeça completo com a arquitetura moderna, focada em privacidade, controle do usuário e funcionalidades avançadas.
