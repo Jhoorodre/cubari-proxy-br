@@ -155,7 +155,7 @@ const RemoteStorageHelp = () => {
                       <Trans 
                         i18nKey="remoteStorageHelp.cubariMoe.intro"
                         components={{
-                          0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" />
+                          0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" aria-label="Cubari.moe website" />
                         }}
                       />
                     </p>
@@ -166,7 +166,7 @@ const RemoteStorageHelp = () => {
                           <Trans 
                             i18nKey="remoteStorageHelp.cubariMoe.step1"
                             components={{
-                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" />
+                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" aria-label="Cubari.moe website" />
                             }}
                           />
                         </li>
@@ -174,7 +174,7 @@ const RemoteStorageHelp = () => {
                           <Trans 
                             i18nKey="remoteStorageHelp.cubariMoe.step2"
                             components={{
-                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" />
+                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" aria-label="Cubari.moe website" />
                             }}
                           />
                         </li>
@@ -183,7 +183,7 @@ const RemoteStorageHelp = () => {
                           <Trans 
                             i18nKey="remoteStorageHelp.cubariMoe.step4"
                             components={{
-                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" />
+                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" aria-label="Cubari.moe website" />
                             }}
                           />
                         </li>
@@ -191,7 +191,7 @@ const RemoteStorageHelp = () => {
                           <Trans 
                             i18nKey="remoteStorageHelp.cubariMoe.step5"
                             components={{
-                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" />
+                              0: <a href="https://cubari.moe/" target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline dark:text-blue-400 font-medium" aria-label="Cubari.moe website" />
                             }}
                           />
                         </li>
