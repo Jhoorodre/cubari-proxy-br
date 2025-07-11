@@ -22,6 +22,9 @@ const requestInterceptor = async (req: AxiosRequestConfig) => {
   const originalData = req.data;
   const originalHeaders = { ...req.headers }; // Copia os cabeçalhos
 
+  // Detectar se está rodando no GitHub Pages
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  
   // Limpar cabeçalhos inseguros ou desnecessários antes de enviar ao proxy
   for (const header of UNSAFE_HEADERS) {
     delete originalHeaders[header];
@@ -35,12 +38,24 @@ const requestInterceptor = async (req: AxiosRequestConfig) => {
   delete originalHeaders.put;
   delete originalHeaders.patch;
 
-  // Se a URL já for para o nosso proxy, não interceptar novamente
-  if (originalUrl?.startsWith('/api/proxy')) {
+  // Se a URL já for para o nosso proxy ou proxy público, não interceptar novamente
+  if (originalUrl?.startsWith('/api/proxy') || originalUrl?.includes('cors-anywhere') || originalUrl?.includes('allorigins.hexlet.app')) {
     return req;
   }
 
   console.log(`[AXIOS INTERCEPTOR] Original: ${originalMethod} ${originalUrl}`);
+
+  if (isGitHubPages) {
+    // Para GitHub Pages, usar AllOrigins como proxy CORS público
+    const encodedUrl = encodeURIComponent(originalUrl || '');
+    req.url = `https://api.allorigins.win/get?url=${encodedUrl}`;
+    req.method = 'GET';
+    delete req.data;
+    req.headers = { 'Content-Type': 'application/json' };
+    
+    console.log(`[AXIOS INTERCEPTOR] GitHub Pages - usando AllOrigins: ${req.url}`);
+    return req;
+  }
 
   const proxyPayload = {
     targetUrl: originalUrl,
@@ -61,6 +76,23 @@ const requestInterceptor = async (req: AxiosRequestConfig) => {
 };
 
 const responseInterceptor = (res: AxiosResponse) => {
+  // Se a resposta veio do AllOrigins, extrair o conteúdo
+  if (res.config.url?.includes('allorigins.win')) {
+    try {
+      const allOriginsResponse = res.data;
+      if (allOriginsResponse && allOriginsResponse.contents) {
+        // Tentar parsear como JSON se possível
+        try {
+          res.data = JSON.parse(allOriginsResponse.contents);
+        } catch {
+          // Se não for JSON, manter como string
+          res.data = allOriginsResponse.contents;
+        }
+      }
+    } catch (error) {
+      console.warn('[RESPONSE INTERCEPTOR] Erro ao processar resposta do AllOrigins:', error);
+    }
+  }
   return res;
 };
 

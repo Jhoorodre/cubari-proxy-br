@@ -69,6 +69,15 @@ const base64UrlEncode = (s: string): string => {
 };
 
 const convertImageUrl = (originalUrl: string): string => {
+  // Detectar se está rodando no GitHub Pages
+  const isGitHubPages = window.location.hostname.includes('github.io');
+  
+  if (isGitHubPages) {
+    // Para GitHub Pages, usar AllOrigins para imagens
+    const encodedUrl = encodeURIComponent(originalUrl);
+    return `https://api.allorigins.win/raw?url=${encodedUrl}`;
+  }
+  
   // Modificado para usar o proxy local em /api/proxy
   const encodedUrl = base64UrlEncode(originalUrl); // Usar a função local base64UrlEncode
   // Adicionamos um parâmetro extra para que o proxy saiba que é uma requisição de imagem,
