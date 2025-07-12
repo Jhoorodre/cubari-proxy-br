@@ -22,7 +22,7 @@ const requestInterceptor = async (req: AxiosRequestConfig) => {
   const originalData = req.data;
   const originalHeaders = { ...req.headers }; // Copia os cabeçalhos
 
-  // Detectar se está rodando no GitHub Pages
+  // Detectar se deve usar proxy público (GitHub Pages)
   const isGitHubPages = window.location.hostname.includes('github.io');
   
   // Limpar cabeçalhos inseguros ou desnecessários antes de enviar ao proxy
@@ -97,35 +97,44 @@ const responseInterceptor = (res: AxiosResponse) => {
 };
 
 const retryInterceptor = (error: any) => {
-  // Só tenta novamente se a requisição original falhou e já estava usando nosso proxy
-  if (error.config && error.config.url?.startsWith('/api/proxy') && !error.config.retried) {
-    error.config.retried = true; // Marca como "retried" para evitar loops infinitos
-    console.log('[RETRY INTERCEPTOR] Retrying request to proxy.');
-    console.log('[RETRY INTERCEPTOR] Original Config URL:', error.config.url);
-    console.log('[RETRY INTERCEPTOR] Original Config Method:', error.config.method);
-    console.log('[RETRY INTERCEPTOR] Original Config Headers:', JSON.stringify(error.config.headers));
-
-    // Limpar cabeçalhos para a tentativa de repetição ao proxy
-    // Manter apenas Content-Type e quaisquer outros cabeçalhos essenciais para o proxy em si.
-    const newHeadersForRetry = { 'Content-Type': 'application/json' };
-    // Se houver outros cabeçalhos que o /api/proxy espera especificamente, adicione-os aqui.
-    // Por exemplo, se o Accept padrão do Axios for necessário:
-    // newHeadersForRetry['Accept'] = 'application/json, text/plain, */*'; 
-    // No entanto, para o erro 431, é melhor ser minimalista.
-
-    error.config.headers = newHeadersForRetry;
-
-    console.log('[RETRY INTERCEPTOR] Retrying with NEW Headers:', JSON.stringify(error.config.headers));
-
-    if (error.config.data && typeof error.config.data === 'object') {
-      const keys = Object.keys(error.config.data);
-      console.log('[RETRY INTERCEPTOR] Retrying with data keys:', keys);
-      if (error.config.data.originalHeaders) {
-        console.log('[RETRY INTERCEPTOR] Retrying with originalHeaders in data:', JSON.stringify(error.config.data.originalHeaders));
+  // Se o proxy local falhou, tentar AllOrigins como fallback
+  if (error.config && error.config.url?.startsWith('/api/proxy') && !error.config.fallbackToPublic) {
+    error.config.fallbackToPublic = true; // Marca para evitar loops infinitos
+    console.log('[RETRY INTERCEPTOR] Proxy local falhou, tentando AllOrigins como fallback');
+    
+    // Extrair a URL original do payload
+    let originalUrl = '';
+    try {
+      if (error.config.data && error.config.data.targetUrl) {
+        originalUrl = error.config.data.targetUrl;
       }
+    } catch (e) {
+      console.warn('[RETRY INTERCEPTOR] Não foi possível extrair URL original:', e);
     }
-    return axios.request(error.config); // Tenta a mesma URL do proxy novamente com cabeçalhos limpos
+    
+    if (originalUrl) {
+      // Usar AllOrigins como fallback
+      const encodedUrl = encodeURIComponent(originalUrl);
+      error.config.url = `https://api.allorigins.win/get?url=${encodedUrl}`;
+      error.config.method = 'GET';
+      delete error.config.data;
+      error.config.headers = { 'Content-Type': 'application/json' };
+      
+      console.log(`[RETRY INTERCEPTOR] Fallback para AllOrigins: ${error.config.url}`);
+      return axios.request(error.config);
+    }
   }
+  
+  // Retry original para /api/proxy
+  if (error.config && error.config.url?.startsWith('/api/proxy') && !error.config.retried && !error.config.fallbackToPublic) {
+    error.config.retried = true;
+    console.log('[RETRY INTERCEPTOR] Retrying request to proxy.');
+    const newHeadersForRetry = { 'Content-Type': 'application/json' };
+    error.config.headers = newHeadersForRetry;
+    console.log('[RETRY INTERCEPTOR] Retrying with NEW Headers:', JSON.stringify(error.config.headers));
+    return axios.request(error.config);
+  }
+  
   return Promise.reject(error);
 };
 
