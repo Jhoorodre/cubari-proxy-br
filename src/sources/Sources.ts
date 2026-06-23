@@ -1,6 +1,9 @@
 import { getJsDelivrBaseUrl, loadExternalSource } from "./SourceUtils";
 import { RawSourceMap, SourceMap } from "./types";
 import "./polyfills";
+import { PizzariaScan, PizzariaScanInfo } from "./PizzariaScan";
+import { CubariSourceMixin } from "./CubariSource";
+import * as cheerio from "cheerio";
 
 const nsfwSourceMap: RawSourceMap = {
   NHentai: {
@@ -104,6 +107,13 @@ const initSources = async (): Promise<void> => {
       console.trace(e)
     }
   }
+
+  // --- Fontes Nativas ---
+  sourceMap["PizzariaScan"] = new (CubariSourceMixin(
+    PizzariaScan as any,
+    PizzariaScanInfo as any,
+    (slug) => `https://pizzariacomics.com/manga/${slug}/`
+  ))(cheerio);
 };
 
 export { initSources, sourceMap };

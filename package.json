@@ -31,8 +31,8 @@
     "remotestoragejs": "^1.2.3"
   },
   "scripts": {
-    "start": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
-    "dev": "cross-env GENERATE_SOURCEMAP=false react-scripts start",
+    "start": "cross-env BROWSER=none GENERATE_SOURCEMAP=false react-scripts start",
+    "dev": "cross-env BROWSER=none GENERATE_SOURCEMAP=false react-scripts start",
     "build": "cross-env GENERATE_SOURCEMAP=false PUBLIC_URL=/cubari-proxy-br react-scripts build",
     "winBuild": "set \"GENERATE_SOURCEMAP=false \" && react-scripts build",
     "test": "react-scripts test",

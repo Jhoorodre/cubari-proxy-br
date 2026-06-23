@@ -62,14 +62,21 @@ const requestInterceptor = async (req: AxiosRequestConfig) => {
     originalMethod: originalMethod,
     originalHeaders: originalHeaders,
     originalBody: originalData,
-    isImage: false // Assumir que não é imagem, a menos que especificado de outra forma
+    isImage: false
   };
 
   req.url = '/api/proxy';
   req.method = 'POST';
   req.data = proxyPayload;
-  // Definir Content-Type para a requisição ao proxy
-  req.headers = { 'Content-Type': 'application/json' };
+  
+  // Wipe all headers and forcefully set JSON.
+  // Axios 1.x might reinstate headers if not deleted explicitly from the instance
+  if (req.headers && typeof req.headers.delete === 'function') {
+    for (const h of UNSAFE_HEADERS) req.headers.delete(h);
+    req.headers.set('Content-Type', 'application/json');
+  } else {
+    req.headers = { 'Content-Type': 'application/json' };
+  }
 
   console.log('[AXIOS INTERCEPTOR] Encaminhando para proxy POST /api/proxy com payload:', proxyPayload);
   return req;
